@@ -19,7 +19,11 @@ public class MovementScript : MonoBehaviour {
 
     private void FixedUpdate() {
         moveInputRaw = new Vector2(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
-        moveInput = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
+        if (SystemInfo.supportsAccelerometer) {
+            moveInput = new Vector2(Input.acceleration.x, Input.acceleration.y);
+        } else {
+            moveInput = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
+        }
             playerRB.AddForce(moveInput * velMult);
         if (playerRB.velocity.magnitude > maxVel) {
             playerRB.AddForce(playerRB.velocity.normalized *- velMult);
